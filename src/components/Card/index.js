@@ -19,7 +19,7 @@ function Card({
   const [isFav, setIsFav] = React.useState(isFavorite);
   const { IsItemAdded } = React.useContext(AppContext);
 
-  console.log(title, IsItemAdded(id));
+  
   const handleClickAdd = () => {
     onAdd({ id, title, price, imgUrl });
     
@@ -67,7 +67,7 @@ function Card({
           <div className="d-flex justify-between align-center">
             <div className="d-flex flex-column">
               <p>Цена:</p>
-              <b>{price} руб.</b>
+              <b>{price.toLocaleString('ru-RU')} руб.</b>
             </div>
 
             <button className={styles.cardAddButton} onClick={handleClickAdd}>

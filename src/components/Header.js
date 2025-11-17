@@ -1,6 +1,8 @@
+import React from "react";
 import { Link } from "react-router-dom";
-
+import { AppContext } from "../App";
 function Header(props) {
+  const {total} = React.useContext(AppContext);
   return (
     <header className="header d-flex justify-between align-center">
       <Link to='/react-store'>
@@ -25,7 +27,7 @@ function Header(props) {
             className="cart-img mr-10"
             src={`${process.env.PUBLIC_URL}/img/cart.svg`}
           />
-          <span>1111 руб.</span>
+          <span>{total.toLocaleString("ru-RU")} руб.</span>
         </li>
 
         <Link to="/react-store/favorites">

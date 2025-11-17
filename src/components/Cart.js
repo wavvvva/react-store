@@ -1,4 +1,45 @@
+import React from "react";
+import Info from "./Card/Info";
+import { AppContext } from "../App";
+import axios from "axios";
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+
 function Cart({ onClickCart, items = [], onRemove }) {
+  const [isOrderComplete, setIsOrderComplete] = React.useState(false);
+  const [orderId, setOrderId] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const {cartItems, setCartItems} = React.useContext(AppContext);
+  const {total} = React.useContext(AppContext);
+  
+  
+  const onClickOrder = async () => {
+    try {
+      setIsLoading(true);
+      const {data} = await axios.post("https://69160e16465a9144626eba53.mockapi.io/orders", {items: cartItems});
+      
+      setOrderId(data.id);
+      setIsOrderComplete(true);
+      setCartItems([]);
+
+      //костыль для mockapi
+      for (let index = 0; index < cartItems.length; index++) {
+        const item = cartItems[index];
+        await axios.delete('https://6915c5a4465a9144626d7fab.mockapi.io/cart/' + item.id);
+        await delay(500);
+      }
+      
+    } catch (error) {
+      alert("Не удалось создать заказ")
+    }
+    setIsLoading(false);
+    
+  };
+
+
+
   return (
     <div style={{ display: "" }} className="overlay">
       <div className="cart d-flex flex-column align-between">
@@ -13,29 +54,14 @@ function Cart({ onClickCart, items = [], onRemove }) {
         </h2>
 
         {!(items.length > 0) ? (
-          <div className="cartEmpty d-flex align-center justify-center flex-column">
-            <img
-              className="mb-20"
-              src={`${process.env.PUBLIC_URL}/img/empty-cart.jpg`}
-              alt="empty"
-            />
-            <h2>Корзина пустая</h2>
-            <p className="opacity-6">
-              Добавьте хотя бы одну позицию, чтобы сделать заказ
-            </p>
-            <button onClick={onClickCart} className="GreenButton">
-              <img
-                src={`${process.env.PUBLIC_URL}/img/arrow.svg`}
-                alt="arrow"
-              />
-              Вернуться назад
-            </button>
-          </div>
+          <Info
+            title={isOrderComplete ? "Заказ оформлен!" : "Корзина пустая"}
+            description={isOrderComplete ? `Ваш заказ #${orderId} скоро будет передан в доставку` :"Для заказа добавьте хотя бы одну позицию в корзину"}
+            image={isOrderComplete ? "/img/order-complete.svg" :"/img/empty-cart.jpg"}
+          />
         ) : (
           <div className="cartItems d-flex flex-column">
-            {
-            items.map((obj) => (
-              
+            {items.map((obj) => (
               <div
                 key={obj.id} //
                 className="cartItem d-flex justify-between align-center"
@@ -44,7 +70,7 @@ function Cart({ onClickCart, items = [], onRemove }) {
                   <img src={`${obj.imgUrl}`} alt="product" />
                   <div className="cartItemInfo d-flex flex-column">
                     <p>{obj.title}</p>
-                    <b>{obj.price} руб.</b>
+                    <b>{obj.price.toLocaleString("ru-RU")} руб.</b>
                   </div>
                 </div>
 
@@ -63,18 +89,22 @@ function Cart({ onClickCart, items = [], onRemove }) {
                 <li>
                   <span>Итого:</span>
                   <div></div>
-                  <b>1 000 000 руб.</b>
+                  <b>{total.toLocaleString("ru-RU")} руб.</b>
                 </li>
 
                 <li>
                   <span>НДС 45%</span>
                   <div></div>
-                  <b>500 000 руб.</b>
+                  <b>{(total * 0.5).toLocaleString("ru-RU")} руб.</b>
                 </li>
               </ul>
 
               <div>
-                <button className="GreenButton d-flex justify-center align-center">
+                <button
+                  disabled={isLoading}
+                  onClick={onClickOrder}
+                  className="GreenButton d-flex justify-center align-center"
+                >
                   Оформить заказ
                   <img
                     src={`${process.env.PUBLIC_URL}/img/arrow.svg`}
