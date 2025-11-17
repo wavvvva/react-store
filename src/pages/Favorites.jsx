@@ -1,6 +1,11 @@
+import React from "react";
 import Card from "../components/Card";
+import {AppContext} from "../App"
 
-function Favorites({items, onAddToCart, onFavorite}) {
+function Favorites({onAddToCart, onFavorite}) {
+
+  const {favorites} = React.useContext(AppContext);
+  const { IsItemAdded } = React.useContext(AppContext);
   return (
     <div className="content clear">
       <div className="content-header d-flex justify-between align-center">
@@ -10,16 +15,16 @@ function Favorites({items, onAddToCart, onFavorite}) {
       <div className="d-flex flex-wrap">
         
         <div className="items-container d-flex">
-        {Array.isArray(items) &&
-          items
+        {Array.isArray(favorites) &&
+          favorites
             .map((item, index) => (
               <Card
                 key={index}
-                imgUrl={item.imgUrl}
+                imgUrl={`${item.imgUrl}`}
                 title={item.name}
                 price={item.price}
-                onAdd={() => onAddToCart(item)}
-                onFav={() => onFavorite(item)}
+                onAdd={(obj) => onAddToCart(obj)}
+                onFav={(obj) => onFavorite(obj)}
                 isFavorite={true}
                 {...item}
               />

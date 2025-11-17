@@ -16,12 +16,15 @@
     }
 
     .cardImage {
-      // пофиксить растяжку изображений
+      
       width: 133px;
       height: 112px;
       margin: 0 auto;
       margin-bottom: 20px;
-      flex: 1 1 1;
+      
+      object-fit: scale-down;     
+      object-position: center; 
+      
     }
     .cardFavButton {
       display: flex;
