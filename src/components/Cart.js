@@ -20,9 +20,7 @@ function Cart({ onClickCart, items = [], onRemove }) {
       setIsLoading(true);
       const {data} = await axios.post("https://69160e16465a9144626eba53.mockapi.io/orders", {items: cartItems});
       
-      setOrderId(data.id);
-      setIsOrderComplete(true);
-      setCartItems([]);
+      
 
       //костыль для mockapi
       for (let index = 0; index < cartItems.length; index++) {
@@ -30,9 +28,13 @@ function Cart({ onClickCart, items = [], onRemove }) {
         await axios.delete('https://6915c5a4465a9144626d7fab.mockapi.io/cart/' + item.id);
         await delay(500);
       }
+
+      setOrderId(data.id);
+      setIsOrderComplete(true);
+      setCartItems([]);
       
     } catch (error) {
-      alert("Не удалось создать заказ")
+      console.log("Не удалось создать заказ")
     }
     setIsLoading(false);
     

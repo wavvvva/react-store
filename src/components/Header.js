@@ -40,7 +40,7 @@ function Header(props) {
           </li>
         </Link>
 
-        <Link to="/react-store/profile">
+        <Link to="/react-store/orders">
           <li className="user d-flex align-center">
             <img
               className="mr-10"

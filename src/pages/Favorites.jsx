@@ -3,7 +3,7 @@ import Card from "../components/Card";
 import {AppContext} from "../App"
 
 function Favorites({onAddToCart, onFavorite}) {
-
+  const {isLoading} = React.useContext(AppContext);
   const {favorites} = React.useContext(AppContext);
   const { IsItemAdded } = React.useContext(AppContext);
   return (
@@ -25,6 +25,7 @@ function Favorites({onAddToCart, onFavorite}) {
                 price={item.price}
                 onAdd={(obj) => onAddToCart(obj)}
                 onFav={(obj) => onFavorite(obj)}
+                loading = {isLoading}
                 isFavorite={true}
                 {...item}
               />

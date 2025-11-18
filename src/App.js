@@ -7,6 +7,8 @@ import axios from "axios";
 
 import Home from "./pages/Home";
 import Favorites from "./pages/Favorites";
+import Orders from "./pages/Orders"
+
 
 export const AppContext = React.createContext({});
 
@@ -62,6 +64,7 @@ function App() {
       const newTotal = cartItems.reduce((sum, item) => sum + item.price, 0);
       setTotal(newTotal);    
     }, [cartItems]);
+
   const onFavorite = async (obj) => {
     try {
       if (
@@ -101,6 +104,10 @@ function App() {
   const IsItemAdded = (title) => {
     return cartItems.some((obj) => obj.title === title);
   };
+
+  const IsFavorite = (title) => {
+    return favorites.some(obj => obj.title === title)
+  }
   return (
     <AppContext.Provider
       value={{
@@ -108,7 +115,9 @@ function App() {
         cartItems,
         favorites,
         total,
+        isLoading,
         IsItemAdded,
+        IsFavorite,
         setCartOpened,
         setCartItems,
         setTotal
@@ -151,6 +160,11 @@ function App() {
               />
             }
           />
+          <Route 
+            path="/react-store/orders"
+            element={
+              <Orders />
+            }/>
         </Routes>
       </div>
     </AppContext.Provider>

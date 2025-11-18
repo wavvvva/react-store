@@ -16,9 +16,9 @@ function Card({
   loading = false
 }) {
   
-  const [isFav, setIsFav] = React.useState(isFavorite);
+  // const [isFav, setIsFav] = React.useState(isFavorite);
   const { IsItemAdded } = React.useContext(AppContext);
-
+  const {IsFavorite} = React.useContext(AppContext);
   
   const handleClickAdd = () => {
     onAdd({ id, title, price, imgUrl });
@@ -27,7 +27,7 @@ function Card({
 
   const handleClickFav = () => {
     onFav({ id, title, price, imgUrl });
-    setIsFav(!isFav);
+
   };
 
   return (
@@ -52,7 +52,7 @@ function Card({
           <button className={styles.cardFavButton} onClick={handleClickFav}>
             <img
               src={
-                isFav
+                IsFavorite(title)
                   ? `${process.env.PUBLIC_URL}/img/favButtonActive.svg`
                   : `${process.env.PUBLIC_URL}/img/favButton.svg`
               }
